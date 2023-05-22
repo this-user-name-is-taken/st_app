@@ -31,7 +31,7 @@ def main():
     st.title("Rooftop Segmentation App")
 
     # Upload image
-    uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png", "tif"])
 
     if uploaded_image is not None:
         # Display the uploaded image
