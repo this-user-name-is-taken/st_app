@@ -1,3 +1,5 @@
+!pip install streamlit-aggrid
+
 import streamlit as st
 import streamlit_aggrid as ag
 import numpy as np
