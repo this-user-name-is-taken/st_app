@@ -1,5 +1,5 @@
 import streamlit as st
-import streamlit_aggrid as ag
+import streamlit.components.v1 as components
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -70,19 +70,9 @@ def main():
     
     else:
         # Get user-selected area on Google Map
-        # Replace YOUR_GOOGLE_MAPS_API_KEY with your actual API key
-        st_aggrid, result = ag.google_map("AIzaSyA91FHeKwuDKwa_aXQ5t0QuaymF38Cbsto", zoom=15, height=500)
-        
-        if result["buttonClicked"]:
-            lat = result["lat"]
-            lon = result["lon"]
-            width = result["width"]
-            height = result["height"]
+        st.subheader("Select an area on the map")
+        lat_lng_box = st.empty()
+        map_result = components.google_map(height=500)
+        lat, lon, lat_max, lon_max = lat_lng_box.lat, lat_lng_box.lon, lat_lng_box.lat_max, lat_lng_box.lon_max
 
-            # Fetch satellite image for the selected area based on lat, lon, width, and height
-            # ...
-
-            # Perform prediction and get the segmentation mask
-            predicted_mask = predict_mask(image)
-
-            # Display the satellite
+        if st
