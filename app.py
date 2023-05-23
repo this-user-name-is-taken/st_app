@@ -75,4 +75,28 @@ def main():
         map_result = components.google_map(height=500)
         lat, lon, lat_max, lon_max = lat_lng_box.lat, lat_lng_box.lon, lat_lng_box.lat_max, lat_lng_box.lon_max
 
-        if st
+        if st.button("Predict"):
+            # Fetch satellite image for the selected area based on lat, lon, lat_max, and lon_max
+            # ...
+
+            # Perform prediction and get the segmentation mask
+            predicted_mask = predict_mask(image)
+
+            # Display the satellite image and the segmentation mask
+            st.subheader("Selected Area")
+            st.image(image, caption="Satellite Image", use_column_width=True)
+
+            st.subheader("Segmentation Mask")
+            st.image(predicted_mask, caption="Segmentation Mask", use_column_width=True)
+
+            # Calculate and display the metrics (IoU, accuracy)
+            # ...
+            # Replace the following lines with your actual metric calculations
+            iou = np.random.rand()
+            accuracy = np.random.rand()
+            st.subheader("Metrics")
+            st.write("IoU:", iou)
+            st.write("Accuracy:", accuracy)
+
+if __name__ == "__main__":
+    main()
