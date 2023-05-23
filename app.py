@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit_aggrid as ag
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -30,40 +31,58 @@ def predict_mask(image):
 def main():
     st.title("Rooftop Segmentation App")
 
-    # Upload image
-    uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png", "tif"])
+    # Upload image or select an area on Google Map
+    option = st.radio("Select Input", ("Upload Image", "Select Area on Google Map"))
 
-    if uploaded_image is not None:
-        # Display the uploaded image
-        image = Image.open(uploaded_image)
-        st.subheader("Uploaded Image")
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+    if option == "Upload Image":
+        # Upload image
+        uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+        if uploaded_image is not None:
+            # Display the uploaded image
+            image = Image.open(uploaded_image)
+            st.subheader("Uploaded Image")
+            st.image(image, caption="Uploaded Image", use_column_width=True)
+            
+            # Perform prediction and get the segmentation mask
+            predicted_mask = predict_mask(image)
+            
+            # Display the segmentation mask side by side with the uploaded image
+            fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+            axes[0].imshow(image)
+            axes[0].set_title("Original Image")
+            axes[0].axis("off")
+            axes[1].imshow(predicted_mask, cmap="gray")
+            axes[1].set_title("Segmentation Mask")
+            axes[1].axis("off")
 
-        # Perform prediction and get the segmentation mask
-        predicted_mask = predict_mask(image)
+            # Show the figure in Streamlit
+            st.subheader("Segmentation Result")
+            st.pyplot(fig)
 
-        # Display the segmentation mask side by side with the uploaded image
-        fig, axes = plt.subplots(1, 2, figsize=(12, 6))
-        axes[0].imshow(image)
-        axes[0].set_title("Original Image")
-        axes[0].axis("off")
-        axes[1].imshow(predicted_mask, cmap="gray")
-        axes[1].set_title("Segmentation Mask")
-        axes[1].axis("off")
+            # Calculate and display the metrics (IoU, accuracy)
+            # ...
+            # Replace the following lines with your actual metric calculations
+            iou = np.random.rand()
+            accuracy = np.random.rand()
+            st.subheader("Metrics")
+            st.write("IoU:", iou)
+            st.write("Accuracy:", accuracy)
+    
+    else:
+        # Get user-selected area on Google Map
+        # Replace YOUR_GOOGLE_MAPS_API_KEY with your actual API key
+        st_aggrid, result = ag.google_map("AIzaSyA91FHeKwuDKwa_aXQ5t0QuaymF38Cbsto", zoom=15, height=500)
+        
+        if result["buttonClicked"]:
+            lat = result["lat"]
+            lon = result["lon"]
+            width = result["width"]
+            height = result["height"]
 
-        # Show the figure in Streamlit
-        st.subheader("Segmentation Result")
-        st.pyplot(fig)
+            # Fetch satellite image for the selected area based on lat, lon, width, and height
+            # ...
 
-        # Calculate and display the metrics (IoU, accuracy)
-        # ...
-        # Replace the following lines with your actual metric calculations
-        iou = np.random.rand()
-        accuracy = np.random.rand()
-        st.subheader("Metrics")
-        st.write("IoU:", iou)
-        st.write("Accuracy:", accuracy)
+            # Perform prediction and get the segmentation mask
+            predicted_mask = predict_mask(image)
 
-if __name__ == "__main__":
-    main()
-
+            # Display the satellite
