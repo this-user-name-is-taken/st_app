@@ -1,102 +1,28 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import numpy as np
-from PIL import Image
-import matplotlib.pyplot as plt
-
-# Function to preprocess the input image
-def preprocess_image(image):
-    # Resize the image to the desired input shape (e.g., 5000x5000)
-    resized_image = image.resize((5000, 5000))
-    # Perform any other preprocessing steps if needed
-    # ...
-    return resized_image
-
-# Function to predict the segmentation mask using your trained UNet model
-def predict_mask(image):
-    # Perform any necessary preprocessing on the image
-    preprocessed_image = preprocess_image(image)
-    
-    # Convert the image to an array and normalize the RGB values
-    image_array = np.array(preprocessed_image) / 255.0
-    
-    # Use your trained UNet model to predict the segmentation mask
-    # ...
-    # Replace the following line with your actual prediction code
-    predicted_mask = np.random.randint(0, 2, size=(5000, 5000))
-    
-    return predicted_mask
-
-# Streamlit app code
-def main():
-    st.title("Rooftop Segmentation App")
-
-    # Upload image or select an area on Google Map
-    option = st.radio("Select Input", ("Upload Image", "Select Area on Google Map"))
-
-    if option == "Upload Image":
-        # Upload image
-        uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-        if uploaded_image is not None:
-            # Display the uploaded image
-            image = Image.open(uploaded_image)
-            st.subheader("Uploaded Image")
-            st.image(image, caption="Uploaded Image", use_column_width=True)
-            
-            # Perform prediction and get the segmentation mask
-            predicted_mask = predict_mask(image)
-            
-            # Display the segmentation mask side by side with the uploaded image
-            fig, axes = plt.subplots(1, 2, figsize=(12, 6))
-            axes[0].imshow(image)
-            axes[0].set_title("Original Image")
-            axes[0].axis("off")
-            axes[1].imshow(predicted_mask, cmap="gray")
-            axes[1].set_title("Segmentation Mask")
-            axes[1].axis("off")
-
-            # Show the figure in Streamlit
-            st.subheader("Segmentation Result")
-            st.pyplot(fig)
-
-            # Calculate and display the metrics (IoU, accuracy)
-            # ...
-            # Replace the following lines with your actual metric calculations
-            iou = np.random.rand()
-            accuracy = np.random.rand()
-            st.subheader("Metrics")
-            st.write("IoU:", iou)
-            st.write("Accuracy:", accuracy)
-    
-    else:
-        # Get user-selected area on Google Map
-        st.subheader("Select an area on the map")
-        lat_lng_box = st.empty()
-        map_result = components.google_map(height=500)
-        lat, lon, lat_max, lon_max = lat_lng_box.lat, lat_lng_box.lon, lat_lng_box.lat_max, lat_lng_box.lon_max
-
-        if st.button("Predict"):
-            # Fetch satellite image for the selected area based on lat, lon, lat_max, and lon_max
-            # ...
-
-            # Perform prediction and get the segmentation mask
-            predicted_mask = predict_mask(image)
-
-            # Display the satellite image and the segmentation mask
-            st.subheader("Selected Area")
-            st.image(image, caption="Satellite Image", use_column_width=True)
-
-            st.subheader("Segmentation Mask")
-            st.image(predicted_mask, caption="Segmentation Mask", use_column_width=True)
-
-            # Calculate and display the metrics (IoU, accuracy)
-            # ...
-            # Replace the following lines with your actual metric calculations
-            iou = np.random.rand()
-            accuracy = np.random.rand()
-            st.subheader("Metrics")
-            st.write("IoU:", iou)
-            st.write("Accuracy:", accuracy)
-
-if __name__ == "__main__":
-    main()
+import pandas as pd
+import time
+import os
+# import json
+# import io
+import folium
+from selenium import webdriver
+from streamlit_folium import st_folium
+st.markdown("""# This is a header
+## This is a sub header
+This is text""")
+# center on Liberty Bell, add marker
+m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+folium.Marker(
+[39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
+).add_to(m)
+st_data = st_folium(m, width=725)
+html = m.get_root().render()
+fName='map.html'
+m.save(fName)
+mUrl= f'file:///map/{fName}'
+driver = webdriver.Chrome()
+driver.get(mUrl)
+time.sleep(2)
+driver.save_screenshot('output.png')
+driver.quit()
