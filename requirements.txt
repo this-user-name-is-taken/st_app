@@ -4,3 +4,4 @@ pandas
 folium
 streamlit_folium 
 selenium
+html2image
