@@ -15,4 +15,4 @@ st_data = st_folium(map, width=725)
 
 hti = Html2Image()
 html = map.get_root().render()
-hti.screenshot(html_str=html, save_as='page.png)
+hti.screenshot(html_str=html, save_as='page.png')
