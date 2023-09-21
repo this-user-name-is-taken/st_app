@@ -71,7 +71,7 @@ def main():
     else:
         # Get user-selected area on Google Map
         # Replace YOUR_GOOGLE_MAPS_API_KEY with your actual API key
-        st_aggrid, result = ag.google_map("AIzaSyA91FHeKwuDKwa_aXQ5t0QuaymF38Cbsto", zoom=15, height=500)
+        st_aggrid, result = ag.google_map("YOUR_GOOGLE_MAPS_API_KEY", zoom=15, height=500)
         
         if result["buttonClicked"]:
             lat = result["lat"]
